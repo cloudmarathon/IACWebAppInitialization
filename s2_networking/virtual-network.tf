@@ -1,6 +1,6 @@
 # Create Virtual Network
 data "azurerm_resource_group" "rg" {
-  name = "rg-hr-dev-pcqhtl"
+  name = "rg-hr-dev-tqrpzb"
 }
 
 resource "azurerm_virtual_network" "vnet" {
