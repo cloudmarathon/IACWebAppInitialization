@@ -1,4 +1,4 @@
-name: Workflow for checking directory path
+name: Workflow for Terraform Operations
 
 on:
   workflow_dispatch:

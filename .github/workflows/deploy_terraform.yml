@@ -1,0 +1,105 @@
+name: 🚀 Run Terraform Operations
+
+on:
+  workflow_dispatch:
+    inputs:
+      terraform_directory:
+        description: 'Select the directory containing Terraform files'
+        required: true
+        type: choice
+        options: 
+          - s1_resourcegroups
+          - s2_networking
+          - s3_loadbalancer
+          - s4_virtualmachines
+          - path
+      plan_options:
+        description: 'Select the terraform command to perform'
+        required: true
+        type: choice
+        options: 
+          - plan
+          - apply
+          - destroy
+      account:
+        description: 'Select account'
+        required: true
+        type: choice
+        options:
+          - chaos
+          - aaron
+          - bhushan
+
+jobs:
+  init:
+    name: 'setup-env'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
+    
+
+  terraform-operations:
+    name: 'Terraform ${{ inputs.plan_options }}'
+    runs-on: ubuntu-latest
+    needs: init
+    # if: ${{ github.event.inputs.plan_options == 'plan' }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
+
+      - name: Setup Terraform Backend
+        id: backend
+        run: |
+          cat > backend.tf << EOF
+          terraform {
+            backend "remote" {
+              organization = "${{ github.event.inputs.account == 'chaos' && 'webappknight' ||
+                                  github.event.inputs.account == 'aaron' && 'Terraform-IACS' ||
+                                  github.event.inputs.account == 'bhushan' && 'webappknight' }}"
+
+              workspaces {
+                name = "${{ github.event.inputs.account == 'chaos' && 'IAC-webapp-test' ||
+                            github.event.inputs.account == 'aaron' && 'IACS' ||
+                            github.event.inputs.account == 'bhushan' && 'IAC-webapp-new' }}"
+              }
+            }
+          }
+          EOF
+        working-directory: ./${{ inputs.terraform_directory }}
+
+      - name: print the backend
+        run: |
+          cat backend.tf 
+        working-directory: ./${{ inputs.terraform_directory }} 
+
+      - name: Terraform Init
+        id: init
+        run: terraform init -no-color 
+        working-directory: ./${{ inputs.terraform_directory }}
+      
+      - name: Terraform Plan
+        if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
+        run: terraform plan -no-color -compact-warnings
+        working-directory: ./${{ inputs.terraform_directory }}
+
+      - name: Terraform Apply
+        id: apply
+        if: ${{ github.event.inputs.plan_options == 'apply' }}
+        run: terraform apply -auto-approve -no-color -compact-warnings
+        working-directory: ./${{ inputs.terraform_directory }}
+
+      - name: Terraform Destroy
+        if: ${{ github.event.inputs.plan_options == 'destroy' }}
+        run: terraform destroy -auto-approve -no-color -compact-warnings
+        working-directory: ./${{ inputs.terraform_directory }}

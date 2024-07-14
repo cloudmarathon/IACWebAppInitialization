@@ -1,71 +1,71 @@
 
-name: workflow for running my first github actions
-on:
-  pull_request:
-    branches: [testing]
-    types: [closed]
-  push:
-    branches: [main]
-# env:
-#   ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
-#   ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
-#   ARM_SUBSCRIPTION_ID: ${{secrets.ARM_CLIENT_ID_SUBSCRIPTION_ID}}
-#   ARM_TENANT_ID: ${{secrets.TENANT_ID}}
-#   ACTIONS_STEP_DEBUG: true
-jobs:
-  myfirst:
-    name: 'FIRST JOB'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash 
-    steps:
-    - name: Check out the repository
-      uses: actions/checkout@v3
-    - name: Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-       cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
-    - name: Install Azure CLI
-      run: |
-        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# name: workflow for running my first github actions
+# on:
+#   pull_request:
+#     branches: [testing]
+#     types: [closed]
+#   push:
+#     branches: [main]
+# # env:
+# #   ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
+# #   ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
+# #   ARM_SUBSCRIPTION_ID: ${{secrets.ARM_CLIENT_ID_SUBSCRIPTION_ID}}
+# #   ARM_TENANT_ID: ${{secrets.TENANT_ID}}
+# #   ACTIONS_STEP_DEBUG: true
+# jobs:
+#   myfirst:
+#     name: 'FIRST JOB'
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         shell: bash 
+#     steps:
+#     - name: Check out the repository
+#       uses: actions/checkout@v3
+#     - name: Terraform
+#       uses: hashicorp/setup-terraform@v3
+#       with:
+#        cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
+#     - name: Install Azure CLI
+#       run: |
+#         curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
     
-    - name: Print Azure CLI Version
-      run: az --version
+#     - name: Print Azure CLI Version
+#       run: az --version
 
-    - name: List Files in terraform Directory
-      run: ls -la ./path
+#     - name: List Files in terraform Directory
+#       run: ls -la ./path
 
-    - name: print Runner Hostname
-      run: hostname 
-      shell: bash 
-    - name: Print Runner IP Address
-      run: curl -sL https://ipconfig.io
-      shell: bash
+#     - name: print Runner Hostname
+#       run: hostname 
+#       shell: bash 
+#     - name: Print Runner IP Address
+#       run: curl -sL https://ipconfig.io
+#       shell: bash
     
-    - name: Terraform fmt
-      id: fmt
-      run: terraform fmt -recursive
-      working-directory: ./path
+#     - name: Terraform fmt
+#       id: fmt
+#       run: terraform fmt -recursive
+#       working-directory: ./path
 
-    - name: Terraform Init
-      id: init
-      run: terraform init -no-color
-      working-directory: ./path
+#     - name: Terraform Init
+#       id: init
+#       run: terraform init -no-color
+#       working-directory: ./path
 
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate -no-color
-      working-directory: ./path
+#     - name: Terraform Validate
+#       id: validate
+#       run: terraform validate -no-color
+#       working-directory: ./path
 
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan -no-color
-      working-directory: ./path
+#     - name: Terraform Plan
+#       id: plan
+#       run: terraform plan -no-color
+#       working-directory: ./path
 
-    - name: Terraform Apply
-      id: apply
-      run: terraform apply -auto-approve -no-color
-      working-directory: ./path
+#     - name: Terraform Apply
+#       id: apply
+#       run: terraform apply -auto-approve -no-color
+#       working-directory: ./path
     
     
