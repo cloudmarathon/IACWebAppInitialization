@@ -99,7 +99,8 @@ jobs:
 
       - name: print the backend
         run: |
-          echo backend.tf  
+          cat backend.tf 
+        working-directory: ./${{ inputs.terraform_directory }} 
 
       # - name: Terraform Init
       #   if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
