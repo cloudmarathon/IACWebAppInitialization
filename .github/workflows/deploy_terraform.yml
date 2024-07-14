@@ -77,6 +77,30 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
 
+      - name: Setup Terraform Backend
+        id: backend
+        run: |
+          cat > backend.tf << EOF
+          terraform {
+            backend "remote" {
+              organization = "${{ github.event.inputs.account == 'chaos' && 'webappknight' ||
+                                  github.event.inputs.account == 'aaron' && 'Terraform-IACS' ||
+                                  github.event.inputs.account == 'bhushan' && 'webappknight' }}"
+
+              workspaces {
+                name = "${{ github.event.inputs.account == 'chaos' && 'IAC-webapp-test' ||
+                            github.event.inputs.account == 'aaron' && 'IACS' ||
+                            github.event.inputs.account == 'bhushan' && 'IAC-webapp-new' }}"
+              }
+            }
+          }
+          EOF
+        working-directory: ./${{ inputs.terraform_directory }}
+
+      - name: print the backend
+        run: |
+          echo backend.tf  
+
       # - name: Terraform Init
       #   if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
       #   id: init
