@@ -1,0 +1,93 @@
+name: Workflow for checking directory path
+
+on:
+  workflow_dispatch:
+    inputs:
+      terraform_directory:
+        description: 'Select the directory containing Terraform files'
+        required: true
+        type: choice
+        options: 
+          - s1_resourcegroups
+          - s2_networking
+          - s3_loadbalancer
+          - s4_virtualmachines
+          - path
+      plan_options:
+        description: 'Select the terraform command to perform'
+        required: true
+        type: choice
+        options: 
+          - plan
+          - apply
+  workflow_call:
+    inputs:
+      terraform_directory:
+        description: 'Select the directory containing Terraform files'
+        required: true
+        type: string
+        
+      plan_options:
+        description: 'Select the terraform command to perform'
+        required: true
+        type: string
+       
+jobs:
+  myfirst:
+    name: 'FIRST JOB'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v3
+
+    - name: Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_TOKEN }}
+
+    - name: Install Azure CLI
+      run: |
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+    - name: Print Azure CLI Version
+      run: az --version
+
+    - name: List Files in Terraform Directory
+      run: ls -la ${{ github.event.inputs.terraform_directory }}
+
+    - name: Print Runner Hostname
+      run: hostname
+    
+    - name: Plan Option name
+      run: write-information "${{ inputs.plan_options }}"
+
+    - name: Print Runner IP Address
+      run: curl -sL https://ipconfig.io
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -recursive
+      working-directory: ${{ inputs.terraform_directory }}
+
+    - name: Terraform Init
+      id: init
+      run: terraform init -no-color
+      working-directory: ${{ inputs.terraform_directory }}
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+      working-directory: ${{ inputs.terraform_directory }}
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      working-directory: ${{ inputs.terraform_directory }}
+
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve -no-color
+      working-directory: ${{ inputs.terraform_directory }}
