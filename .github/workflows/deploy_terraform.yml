@@ -45,7 +45,7 @@ jobs:
     
 
   terraform-operations:
-    name: 'Terraform Plan'
+    name: 'Terraform ${{ inputs.plan_options }}'
     runs-on: ubuntu-latest
     needs: init
     # if: ${{ github.event.inputs.plan_options == 'plan' }}
@@ -84,7 +84,6 @@ jobs:
         working-directory: ./${{ inputs.terraform_directory }} 
 
       - name: Terraform Init
-        if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
         id: init
         run: terraform init -no-color
         working-directory: ./${{ inputs.terraform_directory }}
