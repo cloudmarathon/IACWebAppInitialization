@@ -1,7 +1,6 @@
 # Create Virtual Network
 data "azurerm_resource_group" "rg" {
   name = "rg-hr-dev-tqrpzb"
-  location= "eastus"
 }
 
 resource "azurerm_virtual_network" "vnet" {
