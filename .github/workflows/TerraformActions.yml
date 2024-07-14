@@ -1,4 +1,4 @@
-name: workflow for running my first GitHub Actions
+name: Workflow for checking directory path
 
 on:
   workflow_dispatch:
