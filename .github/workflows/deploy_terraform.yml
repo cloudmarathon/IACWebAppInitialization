@@ -85,21 +85,21 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -no-color
+        run: terraform init -no-color 
         working-directory: ./${{ inputs.terraform_directory }}
       
       - name: Terraform Plan
         if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
-        run: terraform plan -no-color 
+        run: terraform plan -no-color -compact-warnings
         working-directory: ./${{ inputs.terraform_directory }}
 
       - name: Terraform Apply
         id: apply
         if: ${{ github.event.inputs.plan_options == 'apply' }}
-        run: terraform apply -auto-approve -no-color 
+        run: terraform apply -auto-approve -no-color -compact-warnings
         working-directory: ./${{ inputs.terraform_directory }}
 
       - name: Terraform Destroy
         if: ${{ github.event.inputs.plan_options == 'destroy' }}
-        run: terraform destroy -auto-approve -no-color
+        run: terraform destroy -auto-approve -no-color -compact-warnings
         working-directory: ./${{ inputs.terraform_directory }}
