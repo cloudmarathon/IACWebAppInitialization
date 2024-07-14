@@ -57,7 +57,7 @@ jobs:
             -backend-config="organization=${{ github.event.inputs.account == 'chaos' && 'webappknight' ||
                                            github.event.inputs.account == 'aaron' && 'Terraform-IACS' ||
                                            github.event.inputs.account == 'bhushan' && 'webappknight' }}" \
-            -backend-config="workspaces.name=${{ github.event.inputs.account == 'chaos' && 'IAC-webapp-test' ||
+            -backend-config="workspaces=${{ github.event.inputs.account == 'chaos' && 'IAC-webapp-test' ||
                                                 github.event.inputs.account == 'aaron' && 'IACS' ||
                                                 github.event.inputs.account == 'bhushan' && 'IAC-webapp-new' }}" \
             -no-color
