@@ -66,7 +66,7 @@ jobs:
             backend "remote" {
               organization = "${{ github.event.inputs.account == 'chaos' && 'webappknight' ||
                                   github.event.inputs.account == 'aaron' && 'Terraform-IACS' ||
-                                  github.event.inputs.account == 'bhushan' && 'webappknight' }}"
+                                  github.event.inputs.account == 'bhushan' && 'IAC_bhushan' }}"
 
               workspaces {
                 name = "${{ github.event.inputs.terraform_directory }}"
