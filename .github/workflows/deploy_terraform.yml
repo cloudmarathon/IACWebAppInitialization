@@ -31,22 +31,22 @@ on:
           - bhushan
 
 jobs:
-  init:
-    name: 'Terraform Init'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v3
+  # init:
+  #   name: 'setup-env'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out the repository
+  #       uses: actions/checkout@v3
 
-      - name: Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
+  #     - name: Terraform
+  #       uses: hashicorp/setup-terraform@v3
+  #       with:
+  #         cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
 
-      - name: Terraform Init
-        id: init
-        run: terraform init -no-color
-        working-directory: ./${{ inputs.terraform_directory }}
+  #     - name: Terraform Init
+  #       id: init
+  #       run: terraform init -no-color
+  #       working-directory: ./${{ inputs.terraform_directory }}
       
       # - name: Terraform Init
       #   run: |
@@ -63,7 +63,7 @@ jobs:
       #       -no-color
       #   working-directory: ./${{ inputs.terraform_directory }}
 
-  plan:
+  terraform-operations:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
     needs: init
@@ -77,52 +77,79 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
 
+      # - name: Terraform Init
+      #   if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
+      #   id: init
+      #   run: terraform init -no-color
+      #   working-directory: ./${{ inputs.terraform_directory }}
+
       - name: Terraform Init
-        id: init
-        run: terraform init -no-color
+        run: |
+          terraform init \
+            -backend-config="hostname=${{ github.event.inputs.account == 'chaos' && 'app.terraform.io' ||
+                                     github.event.inputs.account == 'aaron' && 'app.terraform.io' ||
+                                     github.event.inputs.account == 'bhushan' && 'app.terraform.io' }}" \
+            -backend-config="organization=${{ github.event.inputs.account == 'chaos' && 'webappknight' ||
+                                           github.event.inputs.account == 'aaron' && 'Terraform-IACS' ||
+                                           github.event.inputs.account == 'bhushan' && 'webappknight' }}" \
+            -backend-config="workspace=${{ github.event.inputs.account == 'chaos' && 'IAC-webapp-test' ||
+                                                github.event.inputs.account == 'aaron' && 'IACS' ||
+                                                github.event.inputs.account == 'bhushan' && 'IAC-webapp-new' }}" \
+            -no-color
         working-directory: ./${{ inputs.terraform_directory }}
       
       - name: Terraform Plan
-        run: terraform plan -no-color
+        if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
+        run: terraform plan -no-color -out=tfplan
         working-directory: ./${{ inputs.terraform_directory }}
 
-  apply:
-    name: 'Terraform Apply'
-    runs-on: ubuntu-latest
-    needs: init
-    if: ${{ github.event.inputs.plan_options == 'apply' }}
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v3
-
-      - name: Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
-
-      - name: Terraform Init
-        id: init
-        run: terraform init -no-color
-        working-directory: ./${{ inputs.terraform_directory }}
-      
       - name: Terraform Apply
-        run: terraform apply -auto-approve -no-color
+        if: ${{ github.event.inputs.plan_options == 'apply' }}
+        run: terraform apply -auto-approve -no-color tfplan
         working-directory: ./${{ inputs.terraform_directory }}
 
-  destroy:
-    name: 'Terraform Destroy'
-    runs-on: ubuntu-latest
-    needs: init
-    if: ${{ github.event.inputs.plan_options == 'destroy' }}
-    steps:
-      - name: Check out the repository
-        uses: actions/checkout@v3
-
-      - name: Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
-      
       - name: Terraform Destroy
+        if: ${{ github.event.inputs.plan_options == 'destroy' }}
         run: terraform destroy -auto-approve -no-color
         working-directory: ./${{ inputs.terraform_directory }}
+
+  # apply:
+  #   name: 'Terraform Apply'
+  #   runs-on: ubuntu-latest
+  #   needs: init
+  #   if: ${{ github.event.inputs.plan_options == 'apply' }}
+  #   steps:
+  #     - name: Check out the repository
+  #       uses: actions/checkout@v3
+
+  #     - name: Terraform
+  #       uses: hashicorp/setup-terraform@v3
+  #       with:
+  #         cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
+
+  #     - name: Terraform Init
+  #       id: init
+  #       run: terraform init -no-color
+  #       working-directory: ./${{ inputs.terraform_directory }}
+      
+  #     - name: Terraform Apply
+  #       run: terraform apply -auto-approve -no-color
+  #       working-directory: ./${{ inputs.terraform_directory }}
+
+  # destroy:
+  #   name: 'Terraform Destroy'
+  #   runs-on: ubuntu-latest
+  #   needs: init
+  #   if: ${{ github.event.inputs.plan_options == 'destroy' }}
+  #   steps:
+  #     - name: Check out the repository
+  #       uses: actions/checkout@v3
+
+  #     - name: Terraform
+  #       uses: hashicorp/setup-terraform@v3
+  #       with:
+  #         cli_config_credentials_token: ${{ secrets.TF_TOKEN }} 
+      
+  #     - name: Terraform Destroy
+  #       run: terraform destroy -auto-approve -no-color
+  #       working-directory: ./${{ inputs.terraform_directory }}
