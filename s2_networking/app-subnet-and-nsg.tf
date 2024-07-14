@@ -10,7 +10,7 @@ resource "azurerm_subnet" "appsubnet" {
 resource "azurerm_network_security_group" "app_subnet_nsg" {
   name                = "${azurerm_subnet.appsubnet.name}-nsg"
   location            = data.azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = data.azurerm_resource_group.rg.name
 }
 
 # Resource-3: Associate NSG and Subnet
