@@ -69,9 +69,7 @@ jobs:
                                   github.event.inputs.account == 'bhushan' && 'webappknight' }}"
 
               workspaces {
-                name = "${{ github.event.inputs.account == 'chaos' && 'IAC-webapp-test' ||
-                            github.event.inputs.account == 'aaron' && 'IACS' ||
-                            github.event.inputs.account == 'bhushan' && 'IAC-webapp-new' }}"
+                name = "${{ github.event.inputs.terraform_directory }}"
               }
             }
           }
