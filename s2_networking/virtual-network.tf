@@ -1,6 +1,6 @@
 # Create Virtual Network
 data "azurerm_resource_group" "rg" {
-  name = "rg-hr-dev-tqrpzb"
+  name = "rg-hr-dev-pcqhtl"
 }
 
 resource "azurerm_virtual_network" "vnet" {
@@ -10,11 +10,3 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = data.azurerm_resource_group.rg.name
   tags = local.common_tags
 }
-
-
-
-
-
-
-
-
