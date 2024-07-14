@@ -62,7 +62,7 @@ jobs:
       run: hostname
     
     - name: Plan Option name
-      run: write-information "${{ inputs.plan_options }}"
+      run: echo "${{ inputs.plan_options }}"
 
     - name: Print Runner IP Address
       run: curl -sL https://ipconfig.io
