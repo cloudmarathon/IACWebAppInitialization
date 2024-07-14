@@ -69,9 +69,7 @@ jobs:
                                   github.event.inputs.account == 'bhushan' && 'webappknight' }}"
 
               workspaces {
-                name = "${{ github.event.inputs.account == 'chaos' && 'IAC-webapp-test' ||
-                            github.event.inputs.account == 'aaron' && 'IACS' ||
-                            github.event.inputs.account == 'bhushan' && 'IAC-webapp-new' }}"
+                name = "${{ github.event.inputs.terraform_directory }}"
               }
             }
           }
@@ -90,16 +88,16 @@ jobs:
       
       - name: Terraform Plan
         if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
-        run: terraform plan -no-color -compact-warnings
+        run: terraform plan -no-color 
         working-directory: ./${{ inputs.terraform_directory }}
 
       - name: Terraform Apply
         id: apply
         if: ${{ github.event.inputs.plan_options == 'apply' }}
-        run: terraform apply -auto-approve -no-color -compact-warnings
+        run: terraform apply -auto-approve -no-color 
         working-directory: ./${{ inputs.terraform_directory }}
 
       - name: Terraform Destroy
         if: ${{ github.event.inputs.plan_options == 'destroy' }}
-        run: terraform destroy -auto-approve -no-color -compact-warnings
+        run: terraform destroy -auto-approve -no-color 
         working-directory: ./${{ inputs.terraform_directory }}
