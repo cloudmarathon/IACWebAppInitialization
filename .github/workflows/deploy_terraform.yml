@@ -130,7 +130,7 @@ jobs:
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.plan_options == 'apply' }}
-        run: terraform apply -auto-approve -no-color tfplan
+        run: terraform apply -auto-approve -no-color 
         working-directory: ./${{ inputs.terraform_directory }}
 
       - name: Terraform Destroy
