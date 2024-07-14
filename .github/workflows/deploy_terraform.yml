@@ -94,11 +94,13 @@ jobs:
         working-directory: ./${{ inputs.terraform_directory }}
 
       - name: Terraform Apply
+        id: apply
         if: ${{ github.event.inputs.plan_options == 'apply' }}
         run: terraform apply -auto-approve -no-color 
         working-directory: ./${{ inputs.terraform_directory }}
 
       - name: Terraform Destroy
+        needs: apply
         if: ${{ github.event.inputs.plan_options == 'destroy' }}
         run: terraform destroy -auto-approve -no-color
         working-directory: ./${{ inputs.terraform_directory }}
