@@ -125,7 +125,7 @@ jobs:
       
       - name: Terraform Plan
         if: ${{ github.event.inputs.plan_options == 'plan' || github.event.inputs.plan_options == 'apply' }}
-        run: terraform plan -no-color -out=tfplan
+        run: terraform plan -no-color 
         working-directory: ./${{ inputs.terraform_directory }}
 
       - name: Terraform Apply
