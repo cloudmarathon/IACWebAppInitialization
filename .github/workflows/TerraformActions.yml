@@ -75,19 +75,19 @@ jobs:
     - name: Terraform Init
       id: init
       run: terraform init -no-color
-      working-directory: ${{ inputs.terraform_directory }}
+      working-directory: ./${{ inputs.terraform_directory }}
 
     - name: Terraform Validate
       id: validate
       run: terraform validate -no-color
-      working-directory: ${{ inputs.terraform_directory }}
+      working-directory: ./${{ inputs.terraform_directory }}
 
     - name: Terraform Plan
       id: plan
       run: terraform plan -no-color
-      working-directory: ${{ inputs.terraform_directory }}
+      working-directory: ./${{ inputs.terraform_directory }}
 
     - name: Terraform Apply
       id: apply
       run: terraform apply -auto-approve -no-color
-      working-directory: ${{ inputs.terraform_directory }}
+      working-directory: ./${{ inputs.terraform_directory }}
