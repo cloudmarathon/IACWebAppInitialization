@@ -1,4 +1,4 @@
-name: 🚀 Run Terraform Operations
+name: Workflow for Terraform Operations
 
 on:
   workflow_dispatch:
