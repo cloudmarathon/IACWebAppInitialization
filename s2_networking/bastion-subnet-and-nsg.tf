@@ -1,7 +1,7 @@
 # Resource-1: Create Bastion / Management Subnet
 resource "azurerm_subnet" "bastionsubnet" {
   name                 = "${azurerm_virtual_network.vnet.name}-${var.bastion_subnet_name}"  
-  resource_group_name  = azurerm_resource_group.rg.name
+  resource_group_name  = data.azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = var.bastion_subnet_address
 }
@@ -9,8 +9,8 @@ resource "azurerm_subnet" "bastionsubnet" {
 # Resource-2: Create Network Security Group (NSG)
 resource "azurerm_network_security_group" "bastion_subnet_nsg" {
   name                = "${azurerm_subnet.bastionsubnet.name}-nsg"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
 }
 
 # Resource-3: Associate NSG and Subnet
@@ -40,7 +40,7 @@ resource "azurerm_network_security_rule" "bastion_nsg_rule_inbound" {
   destination_port_range      = each.value 
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.rg.name
+  resource_group_name         = data.azurerm_resource_group.rg.name
   network_security_group_name = azurerm_network_security_group.bastion_subnet_nsg.name
 }
 
