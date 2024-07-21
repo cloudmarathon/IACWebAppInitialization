@@ -9,7 +9,7 @@ data "azurerm_virtual_network" "vnet" {
 
 data "azurerm_network_interface" "web_linuxvm_nic" {
     name = "hr-dev-web-linuxvm"
-    resource_group_name = "hr-dev-vnet"
+    resource_group_name = "rg-hr-dev-tqrpzb"
 }
 
 # Resource-1: Create Public IP Address for Azure Load Balancer
