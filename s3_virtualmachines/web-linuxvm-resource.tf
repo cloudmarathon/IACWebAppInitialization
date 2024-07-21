@@ -34,8 +34,8 @@ CUSTOM_DATA
 
 resource "azurerm_key_vault" "kv" {
   name                        = "${local.resource_name_prefix}-kv"
-  location                    = data.azurerm_resource_group.example.location
-  resource_group_name         = data.azurerm_resource_group.example.name
+  location                    = data.azurerm_resource_group.rg.location
+  resource_group_name         = data.azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true
   tenant_id                   = "7ff8596a-3615-4bcc-a513-0f5ffcd93bf2"
   soft_delete_retention_days  = 7
