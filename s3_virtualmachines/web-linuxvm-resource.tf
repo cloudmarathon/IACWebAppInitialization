@@ -1,24 +1,3 @@
-# Locals Block for custom data
-data "azurerm_resource_group" "rg" {
-  name = "rg-hr-dev-tqrpzb"
-}
-
-data "azurerm_virtual_network" "vnet" {
-    name = "hr-dev-vnet"
-    resource_group_name = "rg-hr-dev-tqrpzb"
-}
-
-data "azurerm_subnet" "websubnet" {
-    name = "hr-dev-vnet-websubnet"
-    resource_group_name = "rg-hr-dev-tqrpzb"
-    virtual_network_name = "hr-dev-vnet"
-}
-
-data "azurerm_subnet" "bastionsubnet"{
-    name = "hr-dev-vnet-bastionsubnet"
-    resource_group_name = "rg-hr-dev-tqrpzb"
-    virtual_network_name = "hr-dev-vnet"
-}
 locals {
 webvm_custom_data = <<CUSTOM_DATA
 #!/bin/sh
@@ -38,20 +17,27 @@ sudo curl -H "Metadata:true" --noproxy "*" "http://169.254.169.254/metadata/inst
 CUSTOM_DATA  
 }
 
+resource "random_string" "myrandom" {
+  length = 6
+  upper = false 
+  special = false
+  number = false   
+}
+
 resource "azurerm_key_vault" "kv" {
-  name                        = "${local.resource_name_prefix}-kv"
+  name                        = "${local.resource_name_prefix}-${random_string.myrandom.id}-kv"
   location                    = data.azurerm_resource_group.rg.location
   resource_group_name         = data.azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true
-  tenant_id                   = "7ff8596a-3615-4bcc-a513-0f5ffcd93bf2"
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
 
 sku_name = "standard"
 
 access_policy {
-    tenant_id = "7ff8596a-3615-4bcc-a513-0f5ffcd93bf2"
-    object_id = "9acf7dc0-56fe-485f-9e9b-eb3a6f130b35"
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
     key_permissions = [
       "Get",
     ]
