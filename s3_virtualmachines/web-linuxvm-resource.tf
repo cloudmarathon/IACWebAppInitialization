@@ -13,6 +13,12 @@ data "azurerm_subnet" "websubnet" {
     resource_group_name = "rg-hr-dev-tqrpzb"
     virtual_network_name = "hr-dev-vnet"
 }
+
+data "azurerm_subnet" "bastionsubnet"{
+    name = "hr-dev-vnet-bastionsubnet"
+    resource_group_name = "rg-hr-dev-tqrpzb"
+    virtual_network_name = "hr-dev-vnet"
+}
 locals {
 webvm_custom_data = <<CUSTOM_DATA
 #!/bin/sh

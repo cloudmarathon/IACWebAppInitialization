@@ -12,5 +12,5 @@ resource_group_location = "eastus"
 # db_subnet_address = ["10.1.21.0/24"]
 # bastion_subnet_name = "bastionsubnet"
 # bastion_subnet_address = ["10.1.100.0/24"]
-bastion_service_subnet_name = "AzureBastionSubnet"
-bastion_service_address_prefixes = ["10.1.101.0/27"]
+# bastion_service_subnet_name = "AzureBastionSubnet"
+# bastion_service_address_prefixes = ["10.1.101.0/27"]
