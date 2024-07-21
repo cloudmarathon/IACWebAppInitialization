@@ -8,7 +8,7 @@ data "azurerm_virtual_network" "vnet" {
 }
 
 data "azurerm_network_interface" "web_linuxvm_nic" {
-    name = "hr-dev-web-linuxvm"
+    name = "hr-dev-web-linuxvm-nic"
     resource_group_name = "rg-hr-dev-tqrpzb"
 }
 
