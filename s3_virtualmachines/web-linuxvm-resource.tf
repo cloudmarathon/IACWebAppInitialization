@@ -18,7 +18,7 @@ CUSTOM_DATA
 }
 
 resource "azurerm_key_vault" "kv" {
-  name                        = "${local.resource_name_prefix}-kv"
+  name                        = "${local.resource_name_prefix}-bkv"
   location                    = data.azurerm_resource_group.rg.location
   resource_group_name         = data.azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true
