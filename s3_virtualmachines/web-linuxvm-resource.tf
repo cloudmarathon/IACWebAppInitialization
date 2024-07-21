@@ -17,8 +17,15 @@ sudo curl -H "Metadata:true" --noproxy "*" "http://169.254.169.254/metadata/inst
 CUSTOM_DATA  
 }
 
+resource "random_string" "myrandom" {
+  length = 6
+  upper = false 
+  special = false
+  number = false   
+}
+
 resource "azurerm_key_vault" "kv" {
-  name                        = "${local.resource_name_prefix}-bkv"
+  name                        = "${local.resource_name_prefix}-${random_string.myrandom.id}-kv"
   location                    = data.azurerm_resource_group.rg.location
   resource_group_name         = data.azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true
