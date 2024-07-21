@@ -9,6 +9,7 @@ locals {
   }
   resource_group_name = "rg-web-app-eastus"
    vnet_name = "webapp-dev-vnet"
-   web_linuxvm_nic_name = "webapp-dev-web-linuxvm"
+   web_linuxvm_nic_name = "webapp-dev-web-linuxvm-nic"
+
 
 } 
