@@ -45,14 +45,14 @@ sku_name = "standard"
 
 access_policy {
     tenant_id = "7ff8596a-3615-4bcc-a513-0f5ffcd93bf2"
-    object_id = "0750292a-5c2f-4737-ab66-63cdddee9b3c"
+    object_id = "9acf7dc0-56fe-485f-9e9b-eb3a6f130b35"
     key_permissions = [
       "Get",
     ]
 
     secret_permissions = [
        "Set",
-      "Get",
+       "Get",
       "Delete",
       "Purge",
       "Recover"
