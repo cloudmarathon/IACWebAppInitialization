@@ -4,6 +4,10 @@ terraform {
   }
 }
 
+provider "random"{
+
+}
+
 provider "azurerm" {
   features {}
   skip_provider_registration = true
