@@ -25,3 +25,15 @@ variable "resource_group_location" {
   type = string
   default = "eastus2"  
 }
+
+variable "web_linuxvm_instance_count" {
+  description = "number of instances"
+  type = any
+  default = 3
+}
+
+variable "lb_inbound_nat_ports" {
+  description = "inbound port rules"
+  type = any
+  default = ["1022", "2022", "3022", "4022", "5022"]
+}
