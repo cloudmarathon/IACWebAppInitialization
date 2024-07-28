@@ -76,7 +76,8 @@ output "secret_value" {
 
 # Resource: Azure Linux Virtual Machine
 resource "azurerm_linux_virtual_machine" "web_linuxvm" {
-  name = "${local.resource_name_prefix}-web-linuxvm"
+  count = var.web_linuxvm_instance_count
+  name = "${local.resource_name_prefix}-web-linuxvm-${count.index}"
   #computer_name = "web-linux-vm"  # Hostname of the VM (Optional)
   resource_group_name = data.azurerm_resource_group.rg.name
   location = data.azurerm_resource_group.rg.location
@@ -84,8 +85,8 @@ resource "azurerm_linux_virtual_machine" "web_linuxvm" {
   admin_username = "azureuser"
   disable_password_authentication = "false"
   admin_password = azurerm_key_vault_secret.vmsecret.value
-  network_interface_ids = [ azurerm_network_interface.web_linuxvm_nic.id ]
-#   admin_ssh_key {
+  network_interface_ids = [element(azurerm_network_interface.web_linuxvm_nic[*].id, count.index)]
+#   admin_ssh_key { 
 #     username = "azureuser"
 #     public_key = file("${path.module}/ssh-keys/terraform-azure.pub")
 #   }
