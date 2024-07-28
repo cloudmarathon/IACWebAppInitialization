@@ -8,6 +8,7 @@ data "azurerm_virtual_network" "vnet" {
 }
 
 data "azurerm_network_interface" "web_linuxvm_nic" {
-    name = local.web_linuxvm_nic_name
+    count = var.web_linuxvm_instance_count
+    name = "${local.resource_name_prefix}-web-linuxvm-nic-${count.index}"
     resource_group_name = local.resource_group_name
 }
