@@ -1,4 +1,4 @@
-business_divsion = "shilpa"
+business_divsion = "web-app"
 environment = "dev"
-resource_group_name = "sai"
-resource_group_location = "shilpa1"
+resource_group_name = "rg"
+resource_group_location = "eastus"
