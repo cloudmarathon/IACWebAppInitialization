@@ -1,4 +1,4 @@
 business_divsion = "shilpa"
 environment = "dev"
 resource_group_name = "sai"
-resource_group_location = "eastus"
+resource_group_location = "shilpa1"
